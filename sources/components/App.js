@@ -14,6 +14,9 @@ export const App = {
     vnode.state.prevBodyType = state.bodyType;
     vnode.state.prevCustomImage = state.customUploadedImage;
     vnode.state.prevCustomZPos = state.customImageZPos;
+    vnode.state.prevCustomPartUploads = JSON.stringify(
+      state.customPartUploads.map((p) => ({ id: p.id, zPos: p.zPos })),
+    );
   },
   onupdate: function (vnode) {
     // Only sync hash and render canvas if selections, bodyType, or custom image changed
@@ -21,12 +24,16 @@ export const App = {
     const currentBodyType = state.bodyType;
     const currentCustomImage = state.customUploadedImage;
     const currentCustomZPos = state.customImageZPos;
+    const currentCustomPartUploads = JSON.stringify(
+      state.customPartUploads.map((p) => ({ id: p.id, zPos: p.zPos })),
+    );
 
     if (
       currentSelections !== vnode.state.prevSelections ||
       currentBodyType !== vnode.state.prevBodyType ||
       currentCustomImage !== vnode.state.prevCustomImage ||
-      currentCustomZPos !== vnode.state.prevCustomZPos
+      currentCustomZPos !== vnode.state.prevCustomZPos ||
+      currentCustomPartUploads !== vnode.state.prevCustomPartUploads
     ) {
       syncSelectionsToHash();
       if (window.canvasRenderer) {
@@ -42,6 +49,7 @@ export const App = {
       vnode.state.prevBodyType = currentBodyType;
       vnode.state.prevCustomImage = currentCustomImage;
       vnode.state.prevCustomZPos = currentCustomZPos;
+      vnode.state.prevCustomPartUploads = currentCustomPartUploads;
     }
   },
   view: function () {

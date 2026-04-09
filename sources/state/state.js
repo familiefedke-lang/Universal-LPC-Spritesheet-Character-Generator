@@ -46,6 +46,7 @@ export const state = {
   compactDisplay: false, // compact item variant display (smaller thumbnails)
   customUploadedImage: null, // custom uploaded image (Image object)
   customImageZPos: 0, // z-position for custom uploaded image
+  customPartUploads: [], // array of { id, label, image, zPos } for named part uploads
   previewCanvasZoomLevel: 1, // zoom level for animation preview canvas
   fullSpritesheetCanvasZoomLevel: 1, // zoom level for full spritesheet preview canvas
   isRenderingCharacter: false, // true if a character render is in progress
@@ -143,6 +144,7 @@ export async function resetAll() {
   state.selections = {};
   state.customUploadedImage = null;
   state.customImageZPos = 0;
+  state.customPartUploads = [];
   await stateDeps.selectDefaults();
   stateDeps.redraw();
 }

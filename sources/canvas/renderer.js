@@ -243,12 +243,31 @@ export async function renderCharacter(
       }
     }
 
+    // Add custom part uploads to itemsToDraw
+    for (const part of appState.customPartUploads) {
+      if (!part.image) continue;
+      for (const [animName, yPos] of Object.entries(ANIMATION_OFFSETS)) {
+        itemsToDraw.push({
+          itemId: `custom-part-${part.id}`,
+          variant: null,
+          spritePath: null, // Will draw directly from Image object
+          zPos: part.zPos,
+          layerNum: 0,
+          animation: animName,
+          yPos,
+          isCustom: true,
+          customImage: part.image,
+        });
+      }
+    }
+
     // Sort standard items by zPos only (lower zPos = drawn first = behind)
     // This ensures shadow (zPos=0) is drawn before body (zPos=10), etc.
     itemsToDraw.sort((a, b) => a.zPos - b.zPos);
 
-    // save layers for external access
+    // save layers for external access (exclude custom image items which have no spritePath)
     layers = itemsToDraw
+      .filter((item) => item.spritePath !== null)
       .map((item) => {
         const layer = Object.assign({}, item);
         layer.fileName = item.spritePath.substring("spritesheets/".length);
